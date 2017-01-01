@@ -62,13 +62,15 @@
         let seed = Array.from(Array(100).keys());
         let a = [];
 
-        for(let i = 0; i < 600 - 1; i++){
-          a.push(seed.shuffle());
-          // this.push('array', seed.shuffle());
-        }
-        for(let i = 0; i < 1; i++){
-          a.push(this._quicksort(seed.shuffle()));
-        }
+        // for(let i = 0; i < 600 - 1; i++){
+        //   a.push(seed.shuffle());
+        //   // this.push('array', seed.shuffle());
+        // }
+        // for(let i = 0; i < 1; i++){
+        //   a.push(this.quicksort(seed.shuffle()));
+        // }
+
+        a = this.insertionSort(seed.shuffle());
 
         this.set('array', a);
 
@@ -76,7 +78,7 @@
       },
 
 
-      _quicksort: function(array){
+      quicksort: function(array){
         let result = [];
 
         let qsort = function(a){
@@ -104,6 +106,26 @@
         }
 
         return qsort(array);
+      },
+
+      insertionSort: function(_array){
+        let array = [].concat(_array);
+        let result = [];
+        result.push([].concat(array));
+
+        for(let i = 1; i < array.length; i++){
+          let t = array[i];
+          if(array[i - 1] > t){
+            let j;
+            for(j = i; j > 0 && array[j - 1] > t; j--){
+              array[j] = array[j - 1];
+            }
+            array[j] = t;
+          }
+          result.push([].concat(array));
+        }
+
+        return result;
       },
 
       _handleTap: function(e){
