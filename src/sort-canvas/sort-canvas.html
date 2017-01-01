@@ -1,0 +1,82 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="sort-canvas">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+
+    <canvas id="canvas" width="600" height="100"></canvas>
+  </template>
+
+  <script>
+    if (!Array.prototype.shuffle) {
+      Array.prototype.shuffle = function() {
+        // shallow copy
+        var array = [].concat(Object(this));
+        var n = array.length, t, i;
+
+        while (n) {
+          i = Math.floor(Math.random() * n--);
+          t = array[n];
+          array[n] = array[i];
+          array[i] = t;
+        }
+        return array;
+      }
+    }
+
+    Polymer({
+
+      is: 'sort-canvas',
+
+      properties: {
+        prop1: {
+          type: String,
+          value: 'sort-app',
+        },
+        array: {
+          type: Object,
+          value: [],
+        }
+      },
+
+
+      ready: function(){
+        // let seed = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
+        let seed = Array.from(Array(100).keys());
+        // let a = [];
+
+        for(let i = 0; i < 600; i++){
+          this.array.push(seed.shuffle());
+        }
+
+        console.log(this.array);
+
+        this.draw();
+
+      },
+
+      draw: function(){
+        let canvas = this.$.canvas;
+        let ctx = canvas.getContext('2d');
+
+        // draw background
+        ctx.fillStyle = "#eeeeee";
+        ctx.fillRect(0, 0, 600, 100);
+
+        for(let w = 0; w < 600; w++){
+          for(let h = 0; h < 100; h++){
+            ctx.fillStyle = this._getColor(this.array[w][h]);
+            ctx.fillRect(w, h, w + 1, h + 1);
+          }
+        }
+      },
+
+      _getColor: (weight) => `hsl(120, 60%, ${100 - weight}%)`,
+
+    });
+  </script>
+</dom-module>
