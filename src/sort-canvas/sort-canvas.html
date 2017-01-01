@@ -7,12 +7,19 @@
       :host {
         display: block;
       }
+      .list {
+        width: 600px;
+        overflow-x: scroll;
+        white-space: nowrap;
+      }
     </style>
 
     <canvas id="canvas" width="600" height="100"></canvas>
-    <template is="dom-repeat" items="[[array]]">
-      <sort-row row="[[item]]"></sort-row>
-    </template>
+    <div class="list">
+      <template is="dom-repeat" items="[[array]]">
+        <sort-row row="[[item]]"></sort-row>
+      </template>
+    </div>
   </template>
 
   <script>
