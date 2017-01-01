@@ -7,12 +7,38 @@
       :host {
         display: block;
       }
+      .list {
+        width: 600px;
+        overflow-x: scroll;
+        white-space: nowrap;
+      }
+
     </style>
     <h2>Hello [[prop1]]</h2>
-    <sort-canvas></sort-canvas>
+    <sort-canvas array="[[array]]"></sort-canvas>
+    <div class="list">
+      <template is="dom-repeat" items="[[array]]">
+        <sort-row row="[[item]]"></sort-row>
+      </template>
+    </div>
   </template>
 
   <script>
+    if (!Array.prototype.shuffle) {
+      Array.prototype.shuffle = function() {
+        // shallow copy
+        var array = [].concat(Object(this));
+        var n = array.length, t, i;
+
+        while (n) {
+          i = Math.floor(Math.random() * n--);
+          t = array[n];
+          array[n] = array[i];
+          array[i] = t;
+        }
+        return array;
+      }
+    }
     Polymer({
 
       is: 'sort-app',
@@ -22,8 +48,27 @@
           type: String,
           value: 'sort-app',
         },
+        array: {
+          type: Object,
+          value: [],
+          notify: true
+        }
       },
 
+      ready: function(){
+        // let seed = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
+        let seed = Array.from(Array(100).keys());
+        let a = [];
+
+        for(let i = 0; i < 600; i++){
+          a.push(seed.shuffle());
+          // this.push('array', seed.shuffle());
+        }
+
+        this.set('array', a);
+
+        // console.log(this.array);
+      }
     });
   </script>
 </dom-module>

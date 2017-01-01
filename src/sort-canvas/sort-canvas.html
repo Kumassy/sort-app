@@ -7,38 +7,12 @@
       :host {
         display: block;
       }
-      .list {
-        width: 600px;
-        overflow-x: scroll;
-        white-space: nowrap;
-      }
     </style>
 
     <canvas id="canvas" width="600" height="100"></canvas>
-    <div class="list">
-      <template is="dom-repeat" items="[[array]]">
-        <sort-row row="[[item]]"></sort-row>
-      </template>
-    </div>
   </template>
 
   <script>
-    if (!Array.prototype.shuffle) {
-      Array.prototype.shuffle = function() {
-        // shallow copy
-        var array = [].concat(Object(this));
-        var n = array.length, t, i;
-
-        while (n) {
-          i = Math.floor(Math.random() * n--);
-          t = array[n];
-          array[n] = array[i];
-          array[i] = t;
-        }
-        return array;
-      }
-    }
-
     Polymer({
 
       is: 'sort-canvas',
@@ -51,23 +25,28 @@
         array: {
           type: Object,
           value: [],
+          // observer: 'draw'
         }
       },
 
+      observers: [
+       'draw(array.*)'
+     ],
+
 
       ready: function(){
-        // let seed = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
-        let seed = Array.from(Array(100).keys());
-        // let a = [];
+        // // let seed = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
+        // let seed = Array.from(Array(100).keys());
+        // // let a = [];
+        //
+        // for(let i = 0; i < 600; i++){
+        //   // this.array.push(seed.shuffle());
+        //   this.push('array',seed.shuffle() );
+        // }
+        //
+        // console.log(this.array);
 
-        for(let i = 0; i < 600; i++){
-          // this.array.push(seed.shuffle());
-          this.push('array',seed.shuffle() );
-        }
-
-        console.log(this.array);
-
-        this.draw();
+        // this.draw();
         // this.notifyPath('array');
       },
 
@@ -81,6 +60,7 @@
 
         for(let w = 0; w < 600; w++){
           for(let h = 0; h < 100; h++){
+            if(!this.array || !this.array[w]) return;
             ctx.fillStyle = this._getColor(this.array[w][h]);
             ctx.fillRect(w, h, w + 1, h + 1);
           }
