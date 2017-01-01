@@ -1,0 +1,7 @@
+{
+  "name": "sort_visualizer",
+  "short_name": "sort_visualizer",
+  "description": "sort",
+  "start_url": "/",
+  "display": "standalone"
+}
