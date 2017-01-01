@@ -9,7 +9,7 @@
       }
     </style>
 
-    <canvas id="canvas" width="600" height="400"></canvas>
+    <canvas id="canvas" width="1200" height="200"></canvas>
   </template>
 
   <script>
@@ -26,6 +26,10 @@
           type: Object,
           value: [],
           // observer: 'draw'
+        },
+        CELL_SIZE: {
+          type: Number,
+          value: 2,
         }
       },
 
@@ -61,8 +65,8 @@
         for(let w = 0; w < 600; w++){
           for(let h = 0; h < 100; h++){
             if(!this.array || !this.array[w]) return;
-            ctx.fillStyle = this._getColorA(this.array[w][h]);
-            ctx.fillRect(w, h * 4, 1, 4);
+            ctx.fillStyle = this._getColor(this.array[w][h]);
+            ctx.fillRect(w * this.CELL_SIZE, h * this.CELL_SIZE, this.CELL_SIZE, this.CELL_SIZE);
           }
         }
       },
@@ -73,13 +77,13 @@
 
         for(let h = 0; h < 100; h++){
           if(!this.array || !this.array[w]) return;
-          ctx.fillStyle = this._getColor(this.array[w][h]);
-          ctx.fillRect(w, h * 4, 1, 4);
+          ctx.fillStyle = this._getColorA(this.array[w][h]);
+          ctx.fillRect(w * this.CELL_SIZE, h * this.CELL_SIZE, this.CELL_SIZE, this.CELL_SIZE);
         }
       },
       _getColor: (weight) => `hsl(190, 100%, ${100 - weight / 2}%)`,
 
-      _getColorA: (weight) => `hsla(190, 100%, ${100 - weight / 2}%, 0.6)`,
+      _getColorA: (weight) => `hsl(${(190 + 120) % 360}, 100%, ${100 - weight / 2}%)`,
 
     });
   </script>
