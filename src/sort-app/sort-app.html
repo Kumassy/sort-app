@@ -9,16 +9,18 @@
       }
       .list {
         width: 600px;
-        overflow-x: scroll;
+        height: 100vh;
+        overflow: scroll;
         white-space: nowrap;
       }
 
     </style>
     <h2>Hello [[prop1]]</h2>
-    <sort-canvas array="[[array]]"></sort-canvas>
+    <sort-canvas id="canvas" array="[[array]]"></sort-canvas>
     <div class="list">
       <template is="dom-repeat" items="[[array]]">
-        <sort-row row="[[item]]"></sort-row>
+        <!-- <sort-row row="[[item]]" on-tap="_handleTap"></sort-row> -->
+        <sort-row row="[[item]]" on-mouseenter="_handleTap"></sort-row>
       </template>
     </div>
   </template>
@@ -68,6 +70,11 @@
         this.set('array', a);
 
         // console.log(this.array);
+      },
+
+      _handleTap: function(e){
+        console.log(e);
+        this.$.canvas.reDrawAt(e.model.index);
       }
     });
   </script>

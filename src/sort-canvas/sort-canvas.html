@@ -9,7 +9,7 @@
       }
     </style>
 
-    <canvas id="canvas" width="600" height="100"></canvas>
+    <canvas id="canvas" width="600" height="400"></canvas>
   </template>
 
   <script>
@@ -61,13 +61,25 @@
         for(let w = 0; w < 600; w++){
           for(let h = 0; h < 100; h++){
             if(!this.array || !this.array[w]) return;
-            ctx.fillStyle = this._getColor(this.array[w][h]);
-            ctx.fillRect(w, h, w + 1, h + 1);
+            ctx.fillStyle = this._getColorA(this.array[w][h]);
+            ctx.fillRect(w, h * 4, 1, 4);
           }
         }
       },
 
-      _getColor: (weight) => `hsl(120, 60%, ${100 - weight}%)`,
+      reDrawAt: function(w){
+        let canvas = this.$.canvas;
+        let ctx = canvas.getContext('2d');
+
+        for(let h = 0; h < 100; h++){
+          if(!this.array || !this.array[w]) return;
+          ctx.fillStyle = this._getColor(this.array[w][h]);
+          ctx.fillRect(w, h * 4, 1, 4);
+        }
+      },
+      _getColor: (weight) => `hsl(190, 100%, ${100 - weight / 2}%)`,
+
+      _getColorA: (weight) => `hsla(190, 100%, ${100 - weight / 2}%, 0.6)`,
 
     });
   </script>
