@@ -84,22 +84,24 @@
         ctx.fillStyle = "#eeeeee";
         ctx.fillRect(0, 0, this._canvasWidth, this._canvasHeight);
 
-        ctx.fillStyle = 'pink';
-        for(let w = 0; w < this.array.length - 1; w++){
+        let indexList = [];
+        for(let w = 0; w < this.array.length; w++){
           for(let h = 0; h < this.array[w].length; h++){
-            // from v <- array[w][h]
-            // to array[w + 1][h'] where array[w + 1][h'] === v
-            let currentIndex = h;
             let v = this.array[w][h];
-            let nextIndex = this.array[w + 1].findIndex((elem) => elem === v);
-
-            ctx.beginPath();
-            ctx.moveTo(w * ((12 + 4) * 2 + 4) + 12 + 4, 24 * currentIndex + 16)
-            ctx.lineTo((w + 1) * ((12 + 4) * 2 + 4) + 12 + 4, 24 * nextIndex + 16);
-            ctx.stroke();
-
-            [1, 2, 3, 4, 5].findIndex((elem) => elem === 3)
+            indexList[v] = indexList[v] || [];
+            indexList[v].push(h);
           }
+        }
+        // indexList[v] => v の 値の index list, この index を線で結ぶ
+
+        ctx.fillStyle = 'pink';
+        for(let i = 0; i < indexList.length - 1; i++){
+          ctx.beginPath();
+          ctx.moveTo(12 + 4, 24 * indexList[i][0] + 16);
+          for(let w = 1; w < indexList[i].length; w++){
+            ctx.lineTo(w * ((12 + 4) * 2 + 4) + 12 + 4, 24 * indexList[i][w] + 16);
+          }
+          ctx.stroke();
         }
       }
 

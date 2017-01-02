@@ -120,6 +120,10 @@
           value: [],
           notify: true
         },
+        arrayLength: {
+          type: Number,
+          value: 100,
+        },
         sortMethod: {
           type: Object,
           value: []
@@ -128,7 +132,7 @@
 
       ready: function(){
         // let seed = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
-        let seed = Array.from(Array(100).keys());
+        let seed = Array.from(Array(this.arrayLength).keys());
         let a = [];
 
         // for(let i = 0; i < 600 - 1; i++){
@@ -192,6 +196,7 @@
             let j;
             for(j = i; j > 0 && array[j - 1] > t; j--){
               array[j] = array[j - 1];
+              // result.push([].concat(array));
             }
             array[j] = t;
           }
