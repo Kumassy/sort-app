@@ -53,7 +53,7 @@
         <paper-listbox style="height: 100%; overflow: auto;" selected="0">
           <template is="dom-repeat" items="[[sortMethod]]">
            <paper-item>
-             {{item.0}}
+             [[item.0]]
            </paper-item>
            <!-- <paper-item on-tap="_handlePatternListTap" style="justify-content: space-between;">
              {{item.name}}
@@ -143,7 +143,8 @@
         //   a.push(this.quicksort(seed.shuffle()));
         // }
 
-        a = this.insertionSort(seed.shuffle());
+        // a = this.insertionSort(seed.shuffle());
+        a = this.bubbleSort(seed.shuffle());
 
         this.set('array', a);
 
@@ -152,6 +153,7 @@
 
         this.push('sortMethod', ["クイックソート", this.quicksort]);
         this.push('sortMethod', ["挿入ソート", this.insertionSort]);
+        this.push('sortMethod', ["バブルソート", this.bubbleSort]);
       },
 
 
@@ -199,6 +201,23 @@
               // result.push([].concat(array));
             }
             array[j] = t;
+          }
+          result.push([].concat(array));
+        }
+
+        return result;
+      },
+
+      bubbleSort: function(_array){
+        let array = [].concat(_array);
+        let result = [];
+
+        result.push([].concat(array));
+        for(let i = 0; i < array.length; i++){
+          for(let j = 0; j < array.length - 1; j++){
+            if(array[j + 1] < array[j]){
+              [array[j + 1], array[j]] = [array[j], array[j + 1]];
+            }
           }
           result.push([].concat(array));
         }
