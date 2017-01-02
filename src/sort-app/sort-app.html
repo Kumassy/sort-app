@@ -9,8 +9,11 @@
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
 
 <link rel="import" href="../sort-canvas/sort-canvas.html">
+<link rel="import" href="../sort-canvas/sort-locus-canvas.html">
 
 <dom-module id="sort-app">
   <template>
@@ -18,11 +21,27 @@
       :host {
         display: block;
       }
+      .result {
+        position: relative;
+      }
       .list {
-        width: 600px;
-        height: 100vh;
+        /*width: 600px;*/
+        /*height: 100vh;*/
         overflow: scroll;
         white-space: nowrap;
+
+        position: absolute; top: 0; left: 0;
+        /* remove unnecessary space */
+        font-size: 0
+      }
+      sort-locus-canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        font-size: 0;
+      }
+      sort-row {
+        margin-right: 4px;
       }
       app-toolbar {
         background-color: #4285f4;
@@ -32,16 +51,19 @@
     <app-drawer-layout>
       <app-drawer swipe-ope>
         <paper-listbox style="height: 100%; overflow: auto;" selected="0">
-          <!-- <template is="dom-repeat" items="{{app._catalog}}">
-           <paper-item on-tap="_handlePatternListTap" style="justify-content: space-between;">
+          <template is="dom-repeat" items="[[sortMethod]]">
+           <paper-item>
+             {{item.0}}
+           </paper-item>
+           <!-- <paper-item on-tap="_handlePatternListTap" style="justify-content: space-between;">
              {{item.name}}
 
              <life-icon-toggle pressed="{{item.starred}}"></life-icon-toggle>
-           </paper-item>
-          </template> -->
-          <div class="">
+           </paper-item> -->
+          </template>
+          <!-- <div class="">
             hogehogehoge
-          </div>
+          </div> -->
         </paper-listbox>
       </app-drawer>
 
@@ -55,11 +77,14 @@
 
         <h2>Hello [[prop1]]</h2>
         <sort-canvas id="canvas" array="[[array]]"></sort-canvas>
-        <div class="list">
-          <template is="dom-repeat" items="[[array]]">
-            <!-- <sort-row row="[[item]]" on-tap="_handleTap"></sort-row> -->
-            <sort-row row="[[item]]" on-mouseenter="_handleTap"></sort-row>
-          </template>
+        <div class="result">
+          <sort-locus-canvas array="[[array]]"></sort-locus-canvas>
+          <div class="list">
+            <template is="dom-repeat" items="[[array]]">
+              <!-- <sort-row row="[[item]]" on-tap="_handleTap"></sort-row> -->
+              <sort-row row="[[item]]" on-mouseenter="_handleTap"></sort-row>
+            </template>
+          </div>
         </div>
       </app-header-layout>
     </app-drawer-layout>
@@ -94,6 +119,10 @@
           type: Object,
           value: [],
           notify: true
+        },
+        sortMethod: {
+          type: Object,
+          value: []
         }
       },
 
@@ -115,6 +144,10 @@
         this.set('array', a);
 
         // console.log(this.array);
+
+
+        this.push('sortMethod', ["クイックソート", this.quicksort]);
+        this.push('sortMethod', ["挿入ソート", this.insertionSort]);
       },
 
 
