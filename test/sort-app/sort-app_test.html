@@ -25,6 +25,16 @@
           assert.equal(element.is, 'sort-app');
         });
       });
+      suite('sort-app', function() {
+        test('insertionSort works', function() {
+          let element = fixture('basic');
+          let array = Array.from(Array(100).keys()).shuffle();
+
+
+
+          assert.equal(element.insertionSort([].concat(array)), [].concat(array).sort());
+        });
+      });
     </script>
   </body>
 </html>
