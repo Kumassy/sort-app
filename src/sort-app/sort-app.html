@@ -14,6 +14,13 @@
 <link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../../bower_components/paper-spinner/paper-spinner.html">
 
+<!-- <link rel="import" href="../../bower_components/prism-element/prism-element.html"> -->
+<link rel="import" href="../../bower_components/prism-js/prism-js.html">
+<link href="../../bower_components/prism/themes/prism.css" rel="stylesheet" />
+<link href="../../bower_components/prism-js/assets/line-numbers.css" rel="stylesheet" />
+<link href="../../bower_components/prism-js/assets/line-highlight.css" rel="stylesheet" />
+<link href="../../bower_components/prism-js/assets/line-highlight-fix.css" rel="stylesheet" />
+
 <link rel="import" href="../sort-canvas/sort-canvas.html">
 <link rel="import" href="../sort-canvas/sort-locus-canvas.html">
 
@@ -87,7 +94,7 @@
           </app-toolbar>
         </app-header>
 
-        <h2>[[_selectedSortMethod.0]]</h2>
+        <h2>[[_selectedSortMethod.name]]</h2>
         <sort-canvas id="canvas" array="[[array]]"></sort-canvas>
         <div class="result">
           <sort-locus-canvas array="[[array]]"></sort-locus-canvas>
@@ -99,6 +106,10 @@
             </template>
           </div>
         </div>
+
+        <!-- <prism-js language="javascript" linenumbers="true">
+[[_selectedSortMethod.code]]
+        </prism-js> -->
 
         <paper-dialog id="dialog">
           <paper-spinner active></paper-spinner><p>ソートしています...</p>
@@ -175,47 +186,49 @@
           label: 'insertionSort',
           name: "挿入ソート",
           valid: true, // コードが valid かどうか
-          code: function(_array){
-            let array = [].concat(_array);
-            let result = [];
-            result.push([].concat(array));
+          code:
+function(_array){
+  let array = [].concat(_array);
+  let result = [];
+  result.push([].concat(array));
 
-            for(let i = 1; i < array.length; i++){
-              let t = array[i];
-              if(array[i - 1] > t){
-                let j;
-                for(j = i; j > 0 && array[j - 1] > t; j--){
-                  array[j] = array[j - 1];
-                  // result.push([].concat(array));
-                }
-                array[j] = t;
-              }
-              result.push([].concat(array));
-            }
+  for(let i = 1; i < array.length; i++){
+    let t = array[i];
+    if(array[i - 1] > t){
+      let j;
+      for(j = i; j > 0 && array[j - 1] > t; j--){
+        array[j] = array[j - 1];
+        // result.push([].concat(array));
+      }
+      array[j] = t;
+    }
+    result.push([].concat(array));
+  }
 
-            return result;
-          },
+  return result;
+},
         },
         {
           label: 'bubbleSort',
           name: "バブルソート",
           valid: true,
-          code: function(_array){
-            let array = [].concat(_array);
-            let result = [];
+          code:
+function(_array){
+  let array = [].concat(_array);
+  let result = [];
 
-            result.push([].concat(array));
-            for(let i = 0; i < array.length; i++){
-              for(let j = 0; j < array.length - 1; j++){
-                if(array[j + 1] < array[j]){
-                  [array[j + 1], array[j]] = [array[j], array[j + 1]];
-                }
-              }
-              result.push([].concat(array));
-            }
+  result.push([].concat(array));
+  for(let i = 0; i < array.length; i++){
+    for(let j = 0; j < array.length - 1; j++){
+      if(array[j + 1] < array[j]){
+        [array[j + 1], array[j]] = [array[j], array[j + 1]];
+      }
+    }
+    result.push([].concat(array));
+  }
 
-            return result;
-          },
+  return result;
+},
         }];
         this.notifyPath('sortMethod');
 
@@ -281,7 +294,7 @@
         this.$.canvas.reDrawAt(e.model.index);
       },
       _handleSortMethodChanged: function(e){
-        this._selectedSortMethod = e.model.get('item');
+        this.set('_selectedSortMethod', e.model.get('item'));
         this._executeSort();
       }
     });
