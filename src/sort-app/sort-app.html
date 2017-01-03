@@ -220,9 +220,9 @@
         this.notifyPath('sortMethod');
 
 
-        a = this.sortMethod[0].code(seed.shuffle());
 
-        this.set('array', a);
+        this._selectedSortMethod = this.sortMethod[0];
+        this._executeSort();
       },
 
 
@@ -256,13 +256,10 @@
         return qsort(array);
       },
 
-      _handleTap: function(e){
-        console.log(e);
-        this.$.canvas.reDrawAt(e.model.index);
-      },
-      _handleSortMethodChanged: function(e){
+
+      _executeSort: function(){
         let seed = Array.from(Array(this.arrayLength).keys()).shuffle();
-        let sortFunc = e.model.get('item.code');
+        let sortFunc = this._selectedSortMethod.code;
 
         let waitPromise = new Promise((resolve, reject) => {
           setTimeout(resolve, 100);
@@ -278,7 +275,14 @@
           this.$.dialog.close();
         });
 
+      },
+      _handleTap: function(e){
+        console.log(e);
+        this.$.canvas.reDrawAt(e.model.index);
+      },
+      _handleSortMethodChanged: function(e){
         this._selectedSortMethod = e.model.get('item');
+        this._executeSort();
       }
     });
   </script>
