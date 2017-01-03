@@ -52,7 +52,7 @@
       <app-drawer swipe-ope>
         <paper-listbox style="height: 100%; overflow: auto;" selected="0">
           <template is="dom-repeat" items="[[sortMethod]]">
-           <paper-item>
+           <paper-item on-tap="_handleSortMethodChanged">
              [[item.0]]
            </paper-item>
            <!-- <paper-item on-tap="_handlePatternListTap" style="justify-content: space-between;">
@@ -228,6 +228,12 @@
       _handleTap: function(e){
         console.log(e);
         this.$.canvas.reDrawAt(e.model.index);
+      },
+      _handleSortMethodChanged: function(e){
+        let seed = Array.from(Array(this.arrayLength).keys()).shuffle();
+        let sortFunc = e.model.get('item.1');
+
+        this.set('array', sortFunc(seed));
       }
     });
   </script>
