@@ -65,7 +65,7 @@
         <paper-listbox style="height: 100%; overflow: auto;" selected="0">
           <template is="dom-repeat" items="[[sortMethod]]">
            <paper-item on-tap="_handleSortMethodChanged">
-             [[item.0]]
+             [[item.name]]
            </paper-item>
            <!-- <paper-item on-tap="_handlePatternListTap" style="justify-content: space-between;">
              {{item.name}}
@@ -160,16 +160,69 @@
         // }
 
         // a = this.insertionSort(seed.shuffle());
-        a = this.bubbleSort(seed.shuffle());
-
-        this.set('array', a);
+        // a = this.bubbleSort(seed.shuffle());
+        //
+        // this.set('array', a);
 
         // console.log(this.array);
 
 
-        this.push('sortMethod', ["クイックソート", this.quicksort]);
-        this.push('sortMethod', ["挿入ソート", this.insertionSort]);
-        this.push('sortMethod', ["バブルソート", this.bubbleSort]);
+        // this.push('sortMethod', ["クイックソート", this.quicksort]);
+        // this.push('sortMethod', ["挿入ソート", this.insertionSort]);
+        // this.push('sortMethod', ["バブルソート", this.bubbleSort]);
+
+        this.sortMethod = [{
+          label: 'insertionSort',
+          name: "挿入ソート",
+          valid: true, // コードが valid かどうか
+          code: function(_array){
+            let array = [].concat(_array);
+            let result = [];
+            result.push([].concat(array));
+
+            for(let i = 1; i < array.length; i++){
+              let t = array[i];
+              if(array[i - 1] > t){
+                let j;
+                for(j = i; j > 0 && array[j - 1] > t; j--){
+                  array[j] = array[j - 1];
+                  // result.push([].concat(array));
+                }
+                array[j] = t;
+              }
+              result.push([].concat(array));
+            }
+
+            return result;
+          },
+        },
+        {
+          label: 'bubbleSort',
+          name: "バブルソート",
+          valid: true,
+          code: function(_array){
+            let array = [].concat(_array);
+            let result = [];
+
+            result.push([].concat(array));
+            for(let i = 0; i < array.length; i++){
+              for(let j = 0; j < array.length - 1; j++){
+                if(array[j + 1] < array[j]){
+                  [array[j + 1], array[j]] = [array[j], array[j + 1]];
+                }
+              }
+              result.push([].concat(array));
+            }
+
+            return result;
+          },
+        }];
+        this.notifyPath('sortMethod');
+
+
+        a = this.sortMethod[0].code(seed.shuffle());
+
+        this.set('array', a);
       },
 
 
@@ -203,51 +256,13 @@
         return qsort(array);
       },
 
-      insertionSort: function(_array){
-        let array = [].concat(_array);
-        let result = [];
-        result.push([].concat(array));
-
-        for(let i = 1; i < array.length; i++){
-          let t = array[i];
-          if(array[i - 1] > t){
-            let j;
-            for(j = i; j > 0 && array[j - 1] > t; j--){
-              array[j] = array[j - 1];
-              // result.push([].concat(array));
-            }
-            array[j] = t;
-          }
-          result.push([].concat(array));
-        }
-
-        return result;
-      },
-
-      bubbleSort: function(_array){
-        let array = [].concat(_array);
-        let result = [];
-
-        result.push([].concat(array));
-        for(let i = 0; i < array.length; i++){
-          for(let j = 0; j < array.length - 1; j++){
-            if(array[j + 1] < array[j]){
-              [array[j + 1], array[j]] = [array[j], array[j + 1]];
-            }
-          }
-          result.push([].concat(array));
-        }
-
-        return result;
-      },
-
       _handleTap: function(e){
         console.log(e);
         this.$.canvas.reDrawAt(e.model.index);
       },
       _handleSortMethodChanged: function(e){
         let seed = Array.from(Array(this.arrayLength).keys()).shuffle();
-        let sortFunc = e.model.get('item.1');
+        let sortFunc = e.model.get('item.code');
 
         let waitPromise = new Promise((resolve, reject) => {
           setTimeout(resolve, 100);
