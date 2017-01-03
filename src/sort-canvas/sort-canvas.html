@@ -9,7 +9,7 @@
       }
     </style>
 
-    <canvas id="canvas" width="1200" height="200"></canvas>
+    <canvas id="canvas" width$="[[_canvasWidth]]" height$="[[_canvasHeight]]"></canvas>
   </template>
 
   <script>
@@ -30,12 +30,32 @@
         CELL_SIZE: {
           type: Number,
           value: 2,
-        }
+        },
+        _canvasWidth: {
+          type: Number,
+          value: 100,
+          computed: '_computeCanvasWidth(array)'
+        },
+        _canvasHeight: {
+          type: Number,
+          value: 200,
+          computed: '_computeCanvasHeight(array)'
+        },
       },
 
       observers: [
        'draw(array.*)'
      ],
+
+     _computeCanvasWidth: function(array){
+       if(!array) return 0;
+       return array.length * this.CELL_SIZE;
+     },
+
+     _computeCanvasHeight: function(array){
+       if(!array || !array[0]) return 0;
+       return array[0].length * this.CELL_SIZE;
+     },
 
 
       ready: function(){
@@ -60,10 +80,10 @@
 
         // draw background
         ctx.fillStyle = "#eeeeee";
-        ctx.fillRect(0, 0, 600 * this.CELL_SIZE, 100 * this.CELL_SIZE);
+        ctx.fillRect(0, 0, this._canvasWidth, this._canvasHeight);
 
-        for(let w = 0; w < 600; w++){
-          for(let h = 0; h < 100; h++){
+        for(let w = 0; w < this.array.length; w++){
+          for(let h = 0; h < this.array[w].length; h++){
             if(!this.array || !this.array[w]) return;
             ctx.fillStyle = this._getColor(this.array[w][h]);
             ctx.fillRect(w * this.CELL_SIZE, h * this.CELL_SIZE, this.CELL_SIZE, this.CELL_SIZE);
@@ -75,7 +95,7 @@
         let canvas = this.$.canvas;
         let ctx = canvas.getContext('2d');
 
-        for(let h = 0; h < 100; h++){
+        for(let h = 0; h < this.array.length; h++){
           if(!this.array || !this.array[w]) return;
           ctx.fillStyle = this._getColorA(this.array[w][h]);
           ctx.fillRect(w * this.CELL_SIZE, h * this.CELL_SIZE, this.CELL_SIZE, this.CELL_SIZE);
