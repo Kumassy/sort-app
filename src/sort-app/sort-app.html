@@ -107,9 +107,8 @@
           </div>
         </div>
 
-        <!-- <prism-js language="javascript" linenumbers="true">
-[[_selectedSortMethod.code]]
-        </prism-js> -->
+        <prism-js language="javascript" linenumbers="true" input-value="[[_selectedSortMethod.code]]">
+        </prism-js>
 
         <paper-dialog id="dialog">
           <paper-spinner active></paper-spinner><p>ソートしています...</p>
@@ -234,7 +233,7 @@ function(_array){
 
 
 
-        this._selectedSortMethod = this.sortMethod[0];
+        this.set('_selectedSortMethod', this.sortMethod[0]);
         this._executeSort();
       },
 
