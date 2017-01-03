@@ -11,6 +11,8 @@
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/paper-spinner/paper-spinner.html">
 
 <link rel="import" href="../sort-canvas/sort-canvas.html">
 <link rel="import" href="../sort-canvas/sort-locus-canvas.html">
@@ -47,6 +49,9 @@
         background-color: #4285f4;
         color: #fff;
       }
+      paper-spinner {
+        float: left;
+      }
     </style>
     <app-drawer-layout>
       <app-drawer swipe-ope>
@@ -75,17 +80,22 @@
           </app-toolbar>
         </app-header>
 
-        <h2>Hello [[prop1]]</h2>
+        <h2>[[_selectedSortMethod.0]]</h2>
         <sort-canvas id="canvas" array="[[array]]"></sort-canvas>
         <div class="result">
           <sort-locus-canvas array="[[array]]"></sort-locus-canvas>
           <div class="list">
             <template is="dom-repeat" items="[[array]]">
               <!-- <sort-row row="[[item]]" on-tap="_handleTap"></sort-row> -->
-              <sort-row row="[[item]]" on-mouseenter="_handleTap"></sort-row>
+              <!-- <sort-row row="[[item]]" on-mouseenter="_handleTap"></sort-row> -->
+              <sort-row row="[[item]]"></sort-row>
             </template>
           </div>
         </div>
+
+        <paper-dialog id="dialog">
+          <paper-spinner active></paper-spinner><p>ソートしています...</p>
+        </paper-dialog>
       </app-header-layout>
     </app-drawer-layout>
   </template>
@@ -111,10 +121,6 @@
       is: 'sort-app',
 
       properties: {
-        prop1: {
-          type: String,
-          value: 'sort-app',
-        },
         array: {
           type: Object,
           value: [],
@@ -127,7 +133,10 @@
         sortMethod: {
           type: Object,
           value: []
-        }
+        },
+        _selectedSortMethod: {
+          type: Object,
+        },
       },
 
       ready: function(){
@@ -233,7 +242,21 @@
         let seed = Array.from(Array(this.arrayLength).keys()).shuffle();
         let sortFunc = e.model.get('item.1');
 
-        this.set('array', sortFunc(seed));
+        let waitPromise = new Promise((resolve, reject) => {
+          setTimeout(resolve, 100);
+        });
+        let sortPromise = new Promise((resolve, reject) => {
+          resolve(sortFunc(seed));
+        });
+
+        this.$.dialog.open();
+
+        Promise.all([sortPromise, waitPromise]).then((values) => {
+          this.set('array', values[0]);
+          this.$.dialog.close();
+        });
+
+        this._selectedSortMethod = e.model.get('item');
       }
     });
   </script>
