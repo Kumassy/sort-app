@@ -38,7 +38,7 @@
       :host {
         display: block;
       }
-      .result {
+      .detail {
         position: relative;
 
         width: 100%;
@@ -56,6 +56,12 @@
         left: 0;
         /* remove unnecessary space */
         font-size: 0
+      }
+      .canvasWrapper {
+        position: relative;
+
+        width: 100%;
+        overflow-x: scroll;
       }
       sort-locus-canvas {
         /*position: absolute;*/
@@ -111,8 +117,10 @@
         </app-header>
 
         <h2>[[_selectedSortMethod.name]]</h2>
-        <sort-canvas id="canvas" array="[[array]]" cell-size="[[cellSize]]"></sort-canvas>
-        <div class="result">
+        <div class="canvasWrapper">
+          <sort-canvas id="canvas" array="[[array]]" cell-size="[[cellSize]]"></sort-canvas>
+        </div>
+        <div class="detail">
           <sort-locus-canvas array="[[array]]"></sort-locus-canvas>
           <div class="list">
             <template is="dom-repeat" items="[[array]]">
