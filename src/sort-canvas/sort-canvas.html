@@ -27,7 +27,7 @@
           value: [],
           // observer: 'draw'
         },
-        CELL_SIZE: {
+        cellSize: {
           type: Number,
           value: 2,
         },
@@ -49,12 +49,12 @@
 
      _computeCanvasWidth: function(array){
        if(!array) return 0;
-       return array.length * this.CELL_SIZE;
+       return array.length * this.cellSize;
      },
 
      _computeCanvasHeight: function(array){
        if(!array || !array[0]) return 0;
-       return array[0].length * this.CELL_SIZE;
+       return array[0].length * this.cellSize;
      },
 
 
@@ -86,7 +86,7 @@
           for(let h = 0; h < this.array[w].length; h++){
             if(!this.array || !this.array[w]) return;
             ctx.fillStyle = this._getColor(this.array[w][h]);
-            ctx.fillRect(w * this.CELL_SIZE, h * this.CELL_SIZE, this.CELL_SIZE, this.CELL_SIZE);
+            ctx.fillRect(w * this.cellSize, h * this.cellSize, this.cellSize, this.cellSize);
           }
         }
       },
@@ -98,7 +98,7 @@
         for(let h = 0; h < this.array.length; h++){
           if(!this.array || !this.array[w]) return;
           ctx.fillStyle = this._getColorA(this.array[w][h]);
-          ctx.fillRect(w * this.CELL_SIZE, h * this.CELL_SIZE, this.CELL_SIZE, this.CELL_SIZE);
+          ctx.fillRect(w * this.cellSize, h * this.cellSize, this.cellSize, this.cellSize);
         }
       },
       _getColor: (weight) => `hsl(190, 100%, ${100 - weight / 2}%)`,

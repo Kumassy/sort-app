@@ -12,11 +12,14 @@
 <link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
 <link rel="import" href="../../bower_components/paper-spinner/paper-spinner.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../../bower_components/paper-slider/paper-slider.html">
 
 <!-- <link rel="import" href="../../bower_components/prism-element/prism-element.html"> -->
 <link rel="import" href="../../bower_components/prism-js/prism-js.html">
@@ -70,9 +73,12 @@
       paper-spinner {
         float: left;
       }
+      paper-slider {
+        --paper-slider-pin-start-color: var(--google-blue-700);
+      }
     </style>
-    <app-drawer-layout>
-      <app-drawer swipe-ope>
+    <app-drawer-layout id="drawerLayout">
+      <app-drawer>
         <paper-listbox style="height: 100%; overflow: auto;" selected="0">
           <template is="dom-repeat" items="[[sortMethod]]">
            <paper-item on-tap="_handleSortMethodChanged">
@@ -89,7 +95,11 @@
           </div> -->
           <paper-button on-tap="_openNewSortMethodDialog" style="text-transform: none;">
               <iron-icon icon="add" item-icon></iron-icon>
-              Add Sort Method
+              ソートアルゴリズムを追加
+          </paper-button>
+          <paper-button on-tap="_openSettingsDialog" style="text-transform: none;">
+              <iron-icon icon="settings" item-icon></iron-icon>
+              設定
           </paper-button>
         </paper-listbox>
       </app-drawer>
@@ -103,7 +113,7 @@
         </app-header>
 
         <h2>[[_selectedSortMethod.name]]</h2>
-        <sort-canvas id="canvas" array="[[array]]"></sort-canvas>
+        <sort-canvas id="canvas" array="[[array]]" cell-size="[[cellSize]]"></sort-canvas>
         <div class="result">
           <sort-locus-canvas array="[[array]]"></sort-locus-canvas>
           <div class="list">
@@ -117,19 +127,68 @@
 
         <prism-js language="javascript" linenumbers="true" input-value="[[_selectedSortMethod.code]]">
         </prism-js>
+      </app-header-layout>
 
+      <div>
         <paper-dialog id="sortStatusDialog">
           <paper-spinner active></paper-spinner><p>ソートしています...</p>
         </paper-dialog>
+
         <paper-dialog id="newSortDialog">
-          <paper-input label="Identifier" auto-validate pattern="[a-zA-Z]*" error-message="Invalid character!!" value="{{_newSortMethod.identifier}}" placeholder="quickSort"></paper-input>
-          <paper-input label="Name" value="{{_newSortMethod.name}}" placeholder="クイックソート"></paper-input>
-          <paper-textarea label="Code" value="{{_newSortMethod.codeString}}" placeholder="function(array){ .... }"></paper-textarea>
+          <h2>Register new Sort Algorithm</h2>
+          <paper-dialog-scrollable>
+            <paper-input label="Identifier" auto-validate pattern="[a-zA-Z]*" error-message="Invalid character!!" value="{{_newSortMethod.identifier}}" placeholder="quickSort"></paper-input>
+            <paper-input label="Name" value="{{_newSortMethod.name}}" placeholder="クイックソート"></paper-input>
+            <paper-textarea label="Code" value="{{_newSortMethod.codeString}}" placeholder="function(array){ .... }"></paper-textarea>
+          </paper-dialog-scrollable>
           <div class="buttons">
             <paper-button dialog-confirm autofocus on-tap="_registerNewSortMethod">OK</paper-button>
           </div>
         </paper-dialog>
-      </app-header-layout>
+
+        <paper-dialog id="settingsDialog">
+          <paper-dropdown-menu label="エントリ数">
+            <paper-listbox class="dropdown-content" selected="{{settings.arrayLength}}">
+              <paper-item>16</paper-item>
+              <paper-item>32</paper-item>
+              <paper-item>64</paper-item>
+              <paper-item>128</paper-item>
+              <paper-item>256</paper-item>
+            </paper-listbox>
+          </paper-dropdown-menu>
+
+
+          <paper-dropdown-menu label="初期値の設定方法">
+            <paper-listbox class="dropdown-content" selected="{{settings.initialization}}">
+              <paper-item>昇順</paper-item>
+              <paper-item>降順</paper-item>
+              <paper-item>ランダム</paper-item>
+            </paper-listbox>
+          </paper-dropdown-menu>
+
+
+          <paper-dropdown-menu label="キャンバスの大きさ">
+            <paper-listbox class="dropdown-content" selected="{{settings.cellSize}}">
+              <paper-item>1</paper-item>
+              <paper-item>2</paper-item>
+              <paper-item>3</paper-item>
+              <paper-item>4</paper-item>
+              <paper-item>5</paper-item>
+              <paper-item>6</paper-item>
+              <paper-item>7</paper-item>
+              <paper-item>8</paper-item>
+              <paper-item>9</paper-item>
+              <paper-item>10</paper-item>
+            </paper-listbox>
+          </paper-dropdown-menu>
+
+          <paper-slider label="色相" value="{{bgRed}}" max="360" pin></paper-slider>
+
+          <div class="buttons">
+            <paper-button dialog-confirm autofocus on-tap="">OK</paper-button>
+          </div>
+        </paper-dialog>
+      </div>
     </app-drawer-layout>
   </template>
 
@@ -161,11 +220,24 @@
         },
         arrayLength: {
           type: Number,
-          value: 100,
+          // value: 100,
+          computed: '_computeArrayLength(settings.arrayLength)',
+        },
+        cellSize: {
+          type: Number,
+          computed: '_computeCellSize(settings.cellSize)'
+        },
+        initialValue: {
+          type: Object,
+          computed: '_computeInitialValue(settings.initialization, settings.arrayLength)'
         },
         sortMethod: {
           type: Object,
           value: []
+        },
+        settings: {
+          type: Object,
+          value: {}
         },
         _selectedSortMethod: {
           type: Object,
@@ -178,8 +250,8 @@
 
       ready: function(){
         // let seed = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
-        let seed = Array.from(Array(this.arrayLength).keys());
-        let a = [];
+        // let seed = Array.from(Array(this.arrayLength).keys());
+        // let a = [];
 
         // for(let i = 0; i < 600 - 1; i++){
         //   a.push(seed.shuffle());
@@ -252,12 +324,39 @@ function(_array){
         this.notifyPath('sortMethod');
 
 
+        this.settings.arrayLength = 3;
+        this.settings.cellSize = 2;
+        this.settings.initialization = 2;
+
 
         this.set('_selectedSortMethod', this.sortMethod[0]);
         this._executeSort();
       },
 
+      _computeArrayLength: function(arrayLength){
+        if(!arrayLength) arrayLength = 3;
+        return Math.pow(2, 4 + arrayLength);
+      },
 
+      _computeCellSize: function(cellSize){
+        if(!cellSize) cellSize = 2;
+        return cellSize + 1;
+      },
+      _computeInitialValue: function(initialization, arrayLength){
+        if(!initialization) initialization = 2;
+        if(initialization === 0){
+          return Array.from(Array(this.arrayLength).keys());
+        }
+        else if(initialization === 1){
+          return Array.from(Array(this.arrayLength).keys()).reverse();
+        }
+        else if(initialization === 2){
+          return Array.from(Array(this.arrayLength).keys()).shuffle();
+        }
+        else{
+          return [];
+        }
+      },
       quicksort: function(array){
         let result = [];
 
@@ -290,7 +389,8 @@ function(_array){
 
 
       _executeSort: function(){
-        let seed = Array.from(Array(this.arrayLength).keys()).shuffle();
+        // let seed = Array.from(Array(this.arrayLength).keys()).shuffle();
+        let seed = this.initialValue;
         let sortFunc = this._selectedSortMethod.code;
 
         let waitPromise = new Promise((resolve, reject) => {
@@ -320,8 +420,17 @@ function(_array){
         this._executeSort();
       },
 
+      _notifyResize: function(){
+        this.$.newSortDialog.notifyResize();
+      },
+
       _openNewSortMethodDialog: function(e){
+        if(this.$.drawerLayout.narrow) this.$.drawerLayout.drawer.close();
         this.$.newSortDialog.open();
+      },
+      _openSettingsDialog: function(e){
+        if(this.$.drawerLayout.narrow) this.$.drawerLayout.drawer.close();
+        this.$.settingsDialog.open();
       },
 
       _registerNewSortMethod: function(e){
