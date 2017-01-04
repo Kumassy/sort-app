@@ -13,6 +13,10 @@
 <link rel="import" href="../../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../../bower_components/paper-spinner/paper-spinner.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
 
 <!-- <link rel="import" href="../../bower_components/prism-element/prism-element.html"> -->
 <link rel="import" href="../../bower_components/prism-js/prism-js.html">
@@ -83,6 +87,10 @@
           <!-- <div class="">
             hogehogehoge
           </div> -->
+          <paper-button on-tap="_openNewSortMethodDialog" style="text-transform: none;">
+              <iron-icon icon="add" item-icon></iron-icon>
+              Add Sort Method
+          </paper-button>
         </paper-listbox>
       </app-drawer>
 
@@ -110,8 +118,16 @@
         <prism-js language="javascript" linenumbers="true" input-value="[[_selectedSortMethod.code]]">
         </prism-js>
 
-        <paper-dialog id="dialog">
+        <paper-dialog id="sortStatusDialog">
           <paper-spinner active></paper-spinner><p>ソートしています...</p>
+        </paper-dialog>
+        <paper-dialog id="newSortDialog">
+          <paper-input label="Identifier" auto-validate pattern="[a-zA-Z]*" error-message="Invalid character!!" value="{{_newSortMethod.identifier}}" placeholder="quickSort"></paper-input>
+          <paper-input label="Name" value="{{_newSortMethod.name}}" placeholder="クイックソート"></paper-input>
+          <paper-textarea label="Code" value="{{_newSortMethod.codeString}}" placeholder="function(array){ .... }"></paper-textarea>
+          <div class="buttons">
+            <paper-button dialog-confirm autofocus on-tap="_registerNewSortMethod">OK</paper-button>
+          </div>
         </paper-dialog>
       </app-header-layout>
     </app-drawer-layout>
@@ -154,6 +170,10 @@
         _selectedSortMethod: {
           type: Object,
         },
+        _newSortMethod: {
+          type: Object,
+          value: {}
+        }
       },
 
       ready: function(){
@@ -182,7 +202,7 @@
         // this.push('sortMethod', ["バブルソート", this.bubbleSort]);
 
         this.sortMethod = [{
-          label: 'insertionSort',
+          identifier: 'insertionSort',
           name: "挿入ソート",
           valid: true, // コードが valid かどうか
           code:
@@ -208,7 +228,7 @@ function(_array){
 },
         },
         {
-          label: 'bubbleSort',
+          identifier: 'bubbleSort',
           name: "バブルソート",
           valid: true,
           code:
@@ -280,14 +300,17 @@ function(_array){
           resolve(sortFunc(seed));
         });
 
-        this.$.dialog.open();
+        this.$.sortStatusDialog.open();
 
         Promise.all([sortPromise, waitPromise]).then((values) => {
           this.set('array', values[0]);
-          this.$.dialog.close();
+          this.$.sortStatusDialog.close();
         });
 
       },
+
+
+      // event listeners
       _handleTap: function(e){
         console.log(e);
         this.$.canvas.reDrawAt(e.model.index);
@@ -295,6 +318,24 @@ function(_array){
       _handleSortMethodChanged: function(e){
         this.set('_selectedSortMethod', e.model.get('item'));
         this._executeSort();
+      },
+
+      _openNewSortMethodDialog: function(e){
+        this.$.newSortDialog.open();
+      },
+
+      _registerNewSortMethod: function(e){
+        // validate
+        // test sort code
+        let temp = {};
+        temp.identifier = this._newSortMethod.identifier;
+        temp.name = this._newSortMethod.name;
+        temp.code = eval(`(${this._newSortMethod.codeString})`);
+        temp.valid = true;
+
+        // register
+        this.push('sortMethod', temp);
+        this._newSortMethod = {};
       }
     });
   </script>
