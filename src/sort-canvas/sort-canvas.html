@@ -31,6 +31,10 @@
           type: Number,
           value: 2,
         },
+        hue: {
+          type: Number,
+          value: 190,
+        },
         _canvasWidth: {
           type: Number,
           value: 100,
@@ -91,19 +95,21 @@
         }
       },
 
-      reDrawAt: function(w){
-        let canvas = this.$.canvas;
-        let ctx = canvas.getContext('2d');
-
-        for(let h = 0; h < this.array.length; h++){
-          if(!this.array || !this.array[w]) return;
-          ctx.fillStyle = this._getColorA(this.array[w][h]);
-          ctx.fillRect(w * this.cellSize, h * this.cellSize, this.cellSize, this.cellSize);
-        }
+      // reDrawAt: function(w){
+      //   let canvas = this.$.canvas;
+      //   let ctx = canvas.getContext('2d');
+      //
+      //   for(let h = 0; h < this.array.length; h++){
+      //     if(!this.array || !this.array[w]) return;
+      //     ctx.fillStyle = this._getColorA(this.array[w][h]);
+      //     ctx.fillRect(w * this.cellSize, h * this.cellSize, this.cellSize, this.cellSize);
+      //   }
+      // },
+      _getColor: function(weight, max){
+        return `hsl(${this.hue}, 100%, ${100 - (weight / max) * 50}%)`;
       },
-      _getColor: (weight, max) => `hsl(190, 100%, ${100 - (weight / max) * 50}%)`,
 
-      _getColorA: (weight) => `hsl(${(190 + 120) % 360}, 100%, ${100 - weight / 2}%)`,
+      // _getColorA: (weight) => `hsl(${(190 + 120) % 360}, 100%, ${100 - weight / 2}%)`,
 
     });
   </script>

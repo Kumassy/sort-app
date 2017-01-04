@@ -88,7 +88,7 @@
           this.oldSettings.initialization !== this.settings.initialization ||
           this.oldSettings.cellSize !== this.settings.cellSize ||
           this.oldSettings.hue !== this.settings.hue){
-            this.fire('change', {});
+            this.fire('settings-update', {});
         }
 
         this.$.dialog.close();

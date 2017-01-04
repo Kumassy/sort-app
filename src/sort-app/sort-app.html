@@ -118,7 +118,7 @@
 
         <h2>[[_selectedSortMethod.name]]</h2>
         <div class="canvasWrapper">
-          <sort-canvas id="canvas" array="[[array]]" cell-size="[[cellSize]]"></sort-canvas>
+          <sort-canvas id="canvas" array="[[array]]" cell-size="[[cellSize]]" hue="[[settings.hue]]"></sort-canvas>
         </div>
         <div class="detail">
           <sort-locus-canvas array="[[array]]"></sort-locus-canvas>
@@ -150,7 +150,7 @@
         </paper-dialog>
 
 
-        <sort-settings-dialog id="settingsDialog" settings="{{settings}}" on-change="_handleSettingsChanged"></sort-settings-dialog>
+        <sort-settings-dialog id="settingsDialog" settings="{{settings}}" on-settings-update="_handleSettingsChanged"></sort-settings-dialog>
 
       </div>
     </app-drawer-layout>
