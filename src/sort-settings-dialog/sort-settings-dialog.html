@@ -1,0 +1,78 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../../bower_components/paper-slider/paper-slider.html">
+<link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+
+
+<dom-module id="sort-settings-dialog">
+  <template>
+    <paper-dialog id="dialog">
+      <paper-dropdown-menu label="エントリ数">
+        <paper-listbox class="dropdown-content" selected="{{settings.arrayLength}}">
+          <paper-item>16</paper-item>
+          <paper-item>32</paper-item>
+          <paper-item>64</paper-item>
+          <paper-item>128</paper-item>
+          <paper-item>256</paper-item>
+        </paper-listbox>
+      </paper-dropdown-menu>
+
+
+      <paper-dropdown-menu label="初期値の設定方法">
+        <paper-listbox class="dropdown-content" selected="{{settings.initialization}}">
+          <paper-item>昇順</paper-item>
+          <paper-item>降順</paper-item>
+          <paper-item>ランダム</paper-item>
+        </paper-listbox>
+      </paper-dropdown-menu>
+
+
+      <paper-dropdown-menu label="キャンバスの大きさ22">
+        <paper-listbox class="dropdown-content" selected="{{settings.cellSize}}">
+          <paper-item>1</paper-item>
+          <paper-item>2</paper-item>
+          <paper-item>3</paper-item>
+          <paper-item>4</paper-item>
+          <paper-item>5</paper-item>
+          <paper-item>6</paper-item>
+          <paper-item>7</paper-item>
+          <paper-item>8</paper-item>
+          <paper-item>9</paper-item>
+          <paper-item>10</paper-item>
+        </paper-listbox>
+      </paper-dropdown-menu>
+
+      <paper-slider label="色相" value="{{settings.hue}}" max="360" pin></paper-slider>
+
+      <div class="buttons">
+        <paper-button dialog-confirm autofocus>OK</paper-button>
+      </div>
+    </paper-dialog>
+  </template>
+
+  <style>
+    paper-slider {
+      --paper-slider-pin-start-color: var(--google-blue-700);
+    }
+  </style>
+
+  <script>
+    Polymer({
+      is: 'sort-settings-dialog',
+      properties: {
+        settings: {
+          type: Object,
+          notify: true
+        }
+      },
+      open: function(){
+        this.$.dialog.open();
+      }
+    });
+  </script>
+</dom-module>
