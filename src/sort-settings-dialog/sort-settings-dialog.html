@@ -49,7 +49,7 @@
 
       <div>
         <div>色相</div>
-        <paper-slider value="{{settings.hue}}" max="359" min="0" pin></paper-slider>
+        <paper-slider value="{{settings.hue}}" max="359" min="0" pin on-immediate-value-change="_updateSliderStyles" immediate-value="{{_hueImmediateValue}}"></paper-slider>
       </div>
 
       <div class="buttons">
@@ -71,6 +71,9 @@
         settings: {
           type: Object,
           notify: true
+        },
+        _hueImmediateValue: {
+          type: Number,
         }
       },
       open: function(){
@@ -92,7 +95,20 @@
         }
 
         this.$.dialog.close();
-      }
+      },
+
+      _updateSliderStyles: function(e){
+        console.log(e);
+        this.customStyle['--paper-slider-active-color'] = this._getColor(this._hueImmediateValue);
+        this.customStyle['--paper-slider-knob-color'] = this._getColor(this._hueImmediateValue);
+        this.customStyle['--paper-slider-knob-start-color'] = this._getColor(this._hueImmediateValue);
+        this.customStyle['--paper-slider-knob-start-border-color'] = this._getColor(this._hueImmediateValue);
+        this.updateStyles();
+      },
+      _getColor: function(hue){
+        return `hsl(${hue}, 100%, 50%)`;
+      },
+
     });
   </script>
 </dom-module>
