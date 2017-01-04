@@ -85,7 +85,7 @@
         for(let w = 0; w < this.array.length; w++){
           for(let h = 0; h < this.array[w].length; h++){
             if(!this.array || !this.array[w]) return;
-            ctx.fillStyle = this._getColor(this.array[w][h]);
+            ctx.fillStyle = this._getColor(this.array[w][h], this.array[w].length);
             ctx.fillRect(w * this.cellSize, h * this.cellSize, this.cellSize, this.cellSize);
           }
         }
@@ -101,7 +101,7 @@
           ctx.fillRect(w * this.cellSize, h * this.cellSize, this.cellSize, this.cellSize);
         }
       },
-      _getColor: (weight) => `hsl(190, 100%, ${100 - weight / 2}%)`,
+      _getColor: (weight, max) => `hsl(190, 100%, ${100 - (weight / max) * 50}%)`,
 
       _getColorA: (weight) => `hsl(${(190 + 120) % 360}, 100%, ${100 - weight / 2}%)`,
 
