@@ -47,10 +47,13 @@
         </paper-listbox>
       </paper-dropdown-menu>
 
-      <paper-slider label="色相" value="{{settings.hue}}" max="360" pin></paper-slider>
+      <div>
+        <div>色相</div>
+        <paper-slider value="{{settings.hue}}" max="359" min="0" pin></paper-slider>
+      </div>
 
       <div class="buttons">
-        <paper-button dialog-confirm autofocus>OK</paper-button>
+        <paper-button on-tap="_handleDialogClose" autofocus>OK</paper-button>
       </div>
     </paper-dialog>
   </template>
@@ -71,7 +74,24 @@
         }
       },
       open: function(){
+        this.oldSettings = {};
+        this.oldSettings.arrayLength = this.settings.arrayLength;
+        this.oldSettings.initialization = this.settings.initialization;
+        this.oldSettings.cellSize = this.settings.cellSize;
+        this.oldSettings.hue = this.settings.hue;
+
         this.$.dialog.open();
+      },
+
+      _handleDialogClose: function(){
+        if(this.oldSettings.arrayLength !== this.settings.arrayLength ||
+          this.oldSettings.initialization !== this.settings.initialization ||
+          this.oldSettings.cellSize !== this.settings.cellSize ||
+          this.oldSettings.hue !== this.settings.hue){
+            this.fire('change', {});
+        }
+
+        this.$.dialog.close();
       }
     });
   </script>

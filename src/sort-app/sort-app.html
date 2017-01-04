@@ -142,7 +142,7 @@
         </paper-dialog>
 
 
-        <sort-settings-dialog id="settingsDialog" settings="{{settings}}"></sort-settings-dialog>
+        <sort-settings-dialog id="settingsDialog" settings="{{settings}}" on-change="_handleSettingsChanged"></sort-settings-dialog>
 
       </div>
     </app-drawer-layout>
@@ -377,6 +377,10 @@ function(_array){
       },
       _handleSortMethodChanged: function(e){
         this.set('_selectedSortMethod', e.model.get('item'));
+        this._executeSort();
+      },
+
+      _handleSettingsChanged: function(){
         this._executeSort();
       },
 
