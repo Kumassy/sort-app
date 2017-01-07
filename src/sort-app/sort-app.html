@@ -31,6 +31,7 @@
 <link rel="import" href="../sort-canvas/sort-canvas.html">
 <link rel="import" href="../sort-canvas/sort-locus-canvas.html">
 <link rel="import" href="../sort-dialog/sort-settings-dialog.html">
+<link rel="import" href="../sort-dialog/sort-new-method-dialog.html">
 
 <dom-module id="sort-app">
   <template>
@@ -140,7 +141,7 @@
           <paper-spinner active></paper-spinner><p>ソートしています...</p>
         </paper-dialog>
 
-        <paper-dialog id="newSortDialog">
+        <!-- <paper-dialog id="newSortDialog">
           <paper-dialog-scrollable>
             <paper-input label="Identifier" auto-validate pattern="[a-zA-Z]*" error-message="Invalid character!!" value="{{_newSortMethod.identifier}}" placeholder="quickSort"></paper-input>
             <paper-input label="Name" value="{{_newSortMethod.name}}" placeholder="クイックソート"></paper-input>
@@ -149,7 +150,9 @@
           <div class="buttons">
             <paper-button dialog-confirm autofocus on-tap="_registerNewSortMethod">OK</paper-button>
           </div>
-        </paper-dialog>
+        </paper-dialog> -->
+        <sort-new-method-dialog id="newSortDialog">
+        </sort-new-method-dialog>
 
 
         <sort-settings-dialog id="settingsDialog" settings="{{settings}}" on-settings-update="_handleSettingsChanged"></sort-settings-dialog>
@@ -208,10 +211,10 @@
         _selectedSortMethod: {
           type: Object,
         },
-        _newSortMethod: {
-          type: Object,
-          value: {}
-        }
+        // _newSortMethod: {
+        //   type: Object,
+        //   value: {}
+        // }
       },
 
       ready: function(){
@@ -394,9 +397,9 @@ function(_array){
         this._executeSort();
       },
 
-      _notifyResize: function(){
-        this.$.newSortDialog.notifyResize();
-      },
+      // _notifyResize: function(){
+      //   this.$.newSortDialog.notifyResize();
+      // },
 
       _openNewSortMethodDialog: function(e){
         if(this.$.drawerLayout.narrow) this.$.drawerLayout.drawer.close();
