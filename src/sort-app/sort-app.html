@@ -151,8 +151,7 @@
             <paper-button dialog-confirm autofocus on-tap="_registerNewSortMethod">OK</paper-button>
           </div>
         </paper-dialog> -->
-        <sort-new-method-dialog id="newSortDialog">
-        </sort-new-method-dialog>
+        <sort-new-method-dialog id="newSortDialog" on-sort-method-register="_registerNewSortMethod"></sort-new-method-dialog>
 
 
         <sort-settings-dialog id="settingsDialog" settings="{{settings}}" on-settings-update="_handleSettingsChanged"></sort-settings-dialog>
@@ -411,17 +410,16 @@ function(_array){
       },
 
       _registerNewSortMethod: function(e){
-        // validate
-        // test sort code
+        let newSortMethod = e.detail.sort;
+
         let temp = {};
-        temp.identifier = this._newSortMethod.identifier;
-        temp.name = this._newSortMethod.name;
-        temp.code = eval(`(${this._newSortMethod.codeString})`);
+        temp.identifier = newSortMethod.identifier;
+        temp.name = newSortMethod.name;
+        temp.code = newSortMethod.code;
         temp.valid = true;
 
         // register
         this.push('sortMethod', temp);
-        this._newSortMethod = {};
       }
     });
   </script>

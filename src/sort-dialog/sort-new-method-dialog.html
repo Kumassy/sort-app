@@ -60,7 +60,10 @@
         // validate
         if(this._validateCode() && !this.$.identifier.invalid && this._runTest()){
           this.$.dialog.close();
-          this.fire('sort-method-register', {detail: this._newSortMethod});
+          this.fire('sort-method-register', {sort: this._newSortMethod});
+          this._newSortMethod = {};
+          this.$.textarea.invalid = false;
+          this.$.identifier.invalid = false;
         }
         else{
 
