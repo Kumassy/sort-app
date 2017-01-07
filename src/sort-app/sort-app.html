@@ -141,9 +141,11 @@
         </paper-dialog>
 
         <paper-dialog id="newSortDialog">
-          <paper-input label="Identifier" auto-validate pattern="[a-zA-Z]*" error-message="Invalid character!!" value="{{_newSortMethod.identifier}}" placeholder="quickSort"></paper-input>
-          <paper-input label="Name" value="{{_newSortMethod.name}}" placeholder="クイックソート"></paper-input>
-          <paper-textarea label="Code" value="{{_newSortMethod.codeString}}" placeholder="function(array){ .... }"></paper-textarea>
+          <paper-dialog-scrollable>
+            <paper-input label="Identifier" auto-validate pattern="[a-zA-Z]*" error-message="Invalid character!!" value="{{_newSortMethod.identifier}}" placeholder="quickSort"></paper-input>
+            <paper-input label="Name" value="{{_newSortMethod.name}}" placeholder="クイックソート"></paper-input>
+            <paper-textarea label="Code" value="{{_newSortMethod.codeString}}" placeholder="function(array){ .... }" on-value-changed="_notifyResize"></paper-textarea>
+          </paper-dialog-scrollable>
           <div class="buttons">
             <paper-button dialog-confirm autofocus on-tap="_registerNewSortMethod">OK</paper-button>
           </div>
