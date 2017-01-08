@@ -16,27 +16,30 @@
         <paper-input label="Name" value="{{_newSortMethod.name}}" placeholder="クイックソート" required></paper-input>
         <paper-textarea id="textarea" label="Code" value="{{_newSortMethod.codeString}}" placeholder="function(array){ .... }" on-value-changed="_notifyResize" error-message="不正な JavaScript コードです" required></paper-textarea>
 
-      <div class="testcases">
-        <h2>テスト結果</h2>
-        <div class="case1">
-          <h3>テストケース 1</h3>
-          <iron-icon icon="check-circle"></iron-icon>
-          OK
-        </div>
-        <div class="case2">
-          <h3>テストケース 2</h3>
-          <iron-icon icon="check-circle"></iron-icon>
-          OK
-        </div>
-        <div class="case3">
-          <h3>テストケース 3</h3>
-          <iron-icon icon="check-circle"></iron-icon>
-          OK
-        </div>
-      </div>
       </paper-dialog-scrollable>
       <div class="buttons">
         <paper-button autofocus on-tap="_handleTap">OK</paper-button>
+      </div>
+    </paper-dialog>
+
+
+    <paper-dialog id="dialog2">
+      <div class="testcases">
+        <h2>テスト結果</h2>
+
+        <template is="dom-repeat" items="[[_testResults]]">
+          <h3>Case [[__plus1(index)]]</h3>
+          <template is="dom-if" if="[[item]]">
+            <iron-icon icon="check-circle"></iron-icon> OK
+          </template>
+          <template is="dom-if" if="[[!item]]">
+            <iron-icon icon="report-problem"></iron-icon> NG
+          </template>
+        </template>
+        <div class="buttons">
+          <paper-button autofocus>OK</paper-button>
+        </div>
+
       </div>
     </paper-dialog>
   </template>
@@ -52,6 +55,17 @@
           type: Object,
           value: {}
         },
+        _errorMessages: {
+          type: Object,
+          value: []
+        },
+        _testResults: {
+          type: Object,
+          value: []
+        }
+      },
+      __plus1: function(item){
+        return item + 1;
       },
       _notifyResize: function(){
         this.$.dialog.notifyResize();
@@ -126,6 +140,7 @@
           return false;
         }
 
+        this.set('_testResults', testResult);
         return testResult.every((e) => e);
       },
 
