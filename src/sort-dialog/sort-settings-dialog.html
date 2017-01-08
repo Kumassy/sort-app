@@ -12,40 +12,44 @@
 <dom-module id="sort-settings-dialog">
   <template>
     <paper-dialog id="dialog">
-      <paper-dropdown-menu label="エントリ数">
-        <paper-listbox class="dropdown-content" selected="{{settings.arrayLength}}">
-          <paper-item>16</paper-item>
-          <paper-item>32</paper-item>
-          <paper-item>64</paper-item>
-          <paper-item>128</paper-item>
-          <paper-item>256</paper-item>
-        </paper-listbox>
-      </paper-dropdown-menu>
+      <div>
+        <paper-dropdown-menu label="エントリ数">
+          <paper-listbox class="dropdown-content" selected="{{settings.arrayLength}}">
+            <paper-item>16</paper-item>
+            <paper-item>32</paper-item>
+            <paper-item>64</paper-item>
+            <paper-item>128</paper-item>
+            <paper-item>256</paper-item>
+          </paper-listbox>
+        </paper-dropdown-menu>
+      </div>
 
+      <div>
+        <paper-dropdown-menu label="初期値の設定方法">
+          <paper-listbox class="dropdown-content" selected="{{settings.initialization}}">
+            <paper-item>昇順</paper-item>
+            <paper-item>降順</paper-item>
+            <paper-item>ランダム</paper-item>
+          </paper-listbox>
+        </paper-dropdown-menu>
+      </div>
 
-      <paper-dropdown-menu label="初期値の設定方法">
-        <paper-listbox class="dropdown-content" selected="{{settings.initialization}}">
-          <paper-item>昇順</paper-item>
-          <paper-item>降順</paper-item>
-          <paper-item>ランダム</paper-item>
-        </paper-listbox>
-      </paper-dropdown-menu>
-
-
-      <paper-dropdown-menu label="キャンバスの大きさ">
-        <paper-listbox class="dropdown-content" selected="{{settings.cellSize}}">
-          <paper-item>1</paper-item>
-          <paper-item>2</paper-item>
-          <paper-item>3</paper-item>
-          <paper-item>4</paper-item>
-          <paper-item>5</paper-item>
-          <paper-item>6</paper-item>
-          <paper-item>7</paper-item>
-          <paper-item>8</paper-item>
-          <paper-item>9</paper-item>
-          <paper-item>10</paper-item>
-        </paper-listbox>
-      </paper-dropdown-menu>
+      <div>
+        <paper-dropdown-menu label="キャンバスの大きさ">
+          <paper-listbox class="dropdown-content" selected="{{settings.cellSize}}">
+            <paper-item>1</paper-item>
+            <paper-item>2</paper-item>
+            <paper-item>3</paper-item>
+            <paper-item>4</paper-item>
+            <paper-item>5</paper-item>
+            <paper-item>6</paper-item>
+            <paper-item>7</paper-item>
+            <paper-item>8</paper-item>
+            <paper-item>9</paper-item>
+            <paper-item>10</paper-item>
+          </paper-listbox>
+        </paper-dropdown-menu>
+      </div>
 
       <div>
         <div>色相</div>
