@@ -416,8 +416,7 @@ function(_array){
         temp.identifier = newSortMethod.identifier;
         temp.name = newSortMethod.name;
         temp.code = newSortMethod.code;
-        temp.valid = true;
-
+        temp.valid = newSortMethod.valid;
         // register
         this.push('sortMethod', temp);
       }

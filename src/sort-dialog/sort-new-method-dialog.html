@@ -18,28 +18,26 @@
 
       </paper-dialog-scrollable>
       <div class="buttons">
+        <paper-button dialog-dismiss>Cancel</paper-button>
         <paper-button autofocus on-tap="_handleTap">OK</paper-button>
       </div>
     </paper-dialog>
 
 
-    <paper-dialog id="dialog2">
-      <div class="testcases">
-        <h2>テスト結果</h2>
+    <paper-dialog id="testResultDialog">
+      <h2>テスト結果</h2>
 
-        <template is="dom-repeat" items="[[_testResults]]">
-          <h3>Case [[__plus1(index)]]</h3>
-          <template is="dom-if" if="[[item]]">
-            <iron-icon icon="check-circle"></iron-icon> OK
-          </template>
-          <template is="dom-if" if="[[!item]]">
-            <iron-icon icon="report-problem"></iron-icon> NG
-          </template>
+      <template is="dom-repeat" items="[[_testResults]]">
+        <h3>Case [[__plus1(index)]]</h3>
+        <template is="dom-if" if="[[item]]">
+          <iron-icon icon="check-circle"></iron-icon> OK
         </template>
-        <div class="buttons">
-          <paper-button autofocus>OK</paper-button>
-        </div>
-
+        <template is="dom-if" if="[[!item]]">
+          <iron-icon icon="report-problem"></iron-icon> NG
+        </template>
+      </template>
+      <div class="buttons">
+        <paper-button dialog-confirm autofocus>OK</paper-button>
       </div>
     </paper-dialog>
   </template>
@@ -97,8 +95,12 @@ function (_array){
         this.$.name.validate();
         this.$.textarea.validate();
 
-        if(!this.$.identifier.invalid && !this.$.name.invalid && !this.$.textarea.invalid && this._validateCode() && this._runTest()){
+        if(!this.$.identifier.invalid && !this.$.name.invalid && !this.$.textarea.invalid && this._validateCode()){
+          this._newSortMethod.valid = this._runTest();
+
           this.$.dialog.close();
+          this.$.testResultDialog.open();
+
           this.fire('sort-method-register', {sort: this._newSortMethod});
           this._newSortMethod = {};
           this.$.textarea.invalid = false;
