@@ -164,6 +164,8 @@
   </template>
 
   <script>
+    'use strict';
+
     if (!Array.prototype.shuffle) {
       Array.prototype.shuffle = function() {
         // shallow copy
@@ -288,6 +290,109 @@ function(_array){
     }
     result.push([].concat(array));
   }
+
+  return result;
+},
+        },
+        {
+          identifier: 'quickSort',
+          name: "クイックソート",
+          valid: false,
+          code:
+function(_array){
+  let array = [].concat(_array);
+  let result = [];
+  result.push([].concat(array));
+
+
+  let stack = [];
+  for(let i = 0; i <= 40; i++){
+    stack.push({});
+  }
+
+  let sp = 1;
+  let limit = 10;
+  stack[1].left = 0;
+  stack[1].right = array.length - 1;
+
+  let left, right, center;
+
+  do{
+    left = stack[sp].left;
+    right = stack[sp].right;
+    sp = sp - 1;
+
+    while(right - left >= limit){
+      let w1 = array[left];
+      let w2 = array[right];
+      center = Math.floor((left + right) / 2);
+      let w3 = array[center];
+
+      array[center] = array[left + 1];
+
+      // w1 <- [w1, w2, w3].sort()[0]
+      // w2 <- [w1, w2, w3].sort()[1]
+      // w3 <- [w1, w2, w3].sort()[2]
+      if(w1 > w2){
+        [w1, w2] = [w2, w1];
+      }
+      if(w2 > w3){
+        [w2, w3] = [w3, w2];
+        if(w1 > w2){
+          [w1, w2] = [w2, w1];
+        }
+      }
+
+      array[left] = w1;
+      array[left + 1] = w2;
+      array[right] = w3;
+
+      let pivot = w2;
+      let i = left + 1;
+      let j = right;
+      do{
+        do{
+          i = i + 1;
+        }while(array[i] < pivot);
+        do{
+          j = j - 1;
+        }while(array[j] > pivot);
+
+        if(i < j){
+          [ array[i], array[j] ] = [ array[j], array[i] ];
+        }
+      }while(i < j);
+
+      [ array[left + 1], array[j] ] = [ array[j], array[left + 1] ];
+      sp = sp + 1;
+
+      if(j - left <= right - j){
+        stack[sp].left = j + 1;
+        stack[sp].right = right;
+        right = j - 1;
+      }
+      else{
+        stack[sp].left = left;
+        stack[sp].right = j - 1;
+        left = j + 1;
+      }
+
+      result.push([].concat(array));
+    }
+  }while(sp > 0);
+
+  for(let i = 1; i < array.length; i++){
+    let w = array[i];
+
+    let j = i - 1;
+    while(w < array[j] && j > 0){
+      array[j + 1] = array[j];
+      j = j - 1;
+    }
+    array[j + 1] = w;
+  }
+  result.push([].concat(array));
+
 
   return result;
 },
