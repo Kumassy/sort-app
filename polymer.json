@@ -1,0 +1,6 @@
+{
+  "entrypoint": "index.html",
+  "fragments": [
+    "src/sort-app/sort-app.html"
+  ]
+}
