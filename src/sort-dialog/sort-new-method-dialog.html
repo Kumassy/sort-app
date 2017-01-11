@@ -26,16 +26,20 @@
 
     <paper-dialog id="testResultDialog">
       <h2>テスト結果</h2>
-
       <template is="dom-repeat" items="[[_testResults]]">
-        <h3>Case [[__plus1(index)]]</h3>
-        <template is="dom-if" if="[[item]]">
-          <iron-icon icon="check-circle"></iron-icon> OK
-        </template>
-        <template is="dom-if" if="[[!item]]">
-          <iron-icon icon="report-problem"></iron-icon> NG
-        </template>
+        <h4>テスト番号 [[__plus1(index)]]</h4>
+        <div class="test-detail">
+          <template is="dom-if" if="[[item]]">
+            <iron-icon icon="check-circle"></iron-icon> OK
+          </template>
+          <template is="dom-if" if="[[!item]]">
+            <iron-icon icon="report-problem"></iron-icon> NG
+          </template>
+        </div>
+
       </template>
+
+
       <div class="buttons">
         <paper-button dialog-confirm autofocus>OK</paper-button>
       </div>
@@ -43,6 +47,18 @@
   </template>
 
   <style>
+    #testResultDialog h4 {
+      margin-bottom: 4px;
+    }
+    #testResultDialog .test-detail {
+      margin-top: 0;
+    }
+    iron-icon[icon="check-circle"] {
+     color: var(--google-green-500);
+    }
+    iron-icon[icon="report-problem"] {
+     color: var(--google-red-500);
+    }
   </style>
 
   <script>
@@ -59,7 +75,7 @@
         },
         _testResults: {
           type: Object,
-          value: []
+          value: [true, true, false]
         }
       },
 
