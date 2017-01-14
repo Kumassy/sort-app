@@ -147,10 +147,20 @@
   <script>
     'use strict';
 
+
+    if(!Array.prototype.dup) {
+      Array.prototype.clone = function() {
+        // shallow copy
+
+        return Object(this).concat();
+      }
+    }
+
     if (!Array.prototype.shuffle) {
       Array.prototype.shuffle = function() {
         // shallow copy
-        var array = [].concat(Object(this));
+        // var array = [].concat(Object(this));
+        var array = Object(this).clone();
         var n = array.length, t, i;
 
         while (n) {
@@ -209,9 +219,9 @@
           valid: true, // コードが valid かどうか
           code:
 function(_array){
-  let array = [].concat(_array);
+  let array = _array.clone();
   let result = [];
-  result.push([].concat(array));
+  result.push(array.clone());
 
   for(let i = 1; i < array.length; i++){
     let t = array[i];
@@ -219,11 +229,11 @@ function(_array){
       let j;
       for(j = i; j > 0 && array[j - 1] > t; j--){
         array[j] = array[j - 1];
-        // result.push([].concat(array));
+        // result.push(array.clone());
       }
       array[j] = t;
     }
-    result.push([].concat(array));
+    result.push(array.clone());
   }
 
   return result;
@@ -235,17 +245,17 @@ function(_array){
           valid: true,
           code:
 function(_array){
-  let array = [].concat(_array);
+  let array = _array.clone();
   let result = [];
 
-  result.push([].concat(array));
+  result.push(array.clone());
   for(let i = 0; i < array.length; i++){
     for(let j = 0; j < array.length - 1; j++){
       if(array[j + 1] < array[j]){
         [array[j + 1], array[j]] = [array[j], array[j + 1]];
       }
     }
-    result.push([].concat(array));
+    result.push(array.clone());
   }
 
   return result;
@@ -257,9 +267,9 @@ function(_array){
           valid: true,
           code:
 function(_array){
-  let array = [].concat(_array);
+  let array = _array.clone();
   let result = [];
-  result.push([].concat(array));
+  result.push(array.clone());
 
 
   let stack = [];
@@ -334,7 +344,7 @@ function(_array){
         left = j + 1;
       }
 
-      result.push([].concat(array));
+      result.push(array.clone());
     }
   }while(sp > 0);
 
@@ -342,13 +352,13 @@ function(_array){
     let w = array[i];
 
     let j = i - 1;
-    while(w < array[j] && j > 0){
+    while(w < array[j] && j >= 0){
       array[j + 1] = array[j];
       j = j - 1;
     }
     array[j + 1] = w;
   }
-  result.push([].concat(array));
+  result.push(array.clone());
 
 
   return result;
