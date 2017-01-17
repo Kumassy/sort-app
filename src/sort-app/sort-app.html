@@ -410,6 +410,17 @@ function(_array){
         let seed = this.initialValue;
         let sortFunc = this._selectedSortMethod.code;
 
+        let tryDrawerClosePromise = new Promise((resolve, reject) => {
+          if(this.$.drawerLayout.narrow){
+            this.$.drawerLayout.drawer.close();
+
+            // wait until animation finished
+            setTimeout(resolve, 250);
+          }
+          else{
+            setTimeout(resolve, 0);
+          }
+        });
         let waitPromise = new Promise((resolve, reject) => {
           setTimeout(resolve, 100);
         });
@@ -419,9 +430,11 @@ function(_array){
 
         this.$.sortStatusDialog.open();
 
-        Promise.all([sortPromise, waitPromise]).then((values) => {
-          this.set('array', values[0]);
-          this.$.sortStatusDialog.close();
+        tryDrawerClosePromise.then(() => {
+          return Promise.all([sortPromise, waitPromise]).then((values) => {
+            this.set('array', values[0]);
+            this.$.sortStatusDialog.close();
+          });
         });
 
       },
