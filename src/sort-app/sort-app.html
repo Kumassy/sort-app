@@ -213,32 +213,7 @@
       },
 
       ready: function(){
-        this.sortMethod = [{
-          identifier: 'insertionSort',
-          name: "挿入ソート",
-          valid: true, // コードが valid かどうか
-          code:
-function(_array){
-  let array = _array.clone();
-  let result = [];
-  result.push(array.clone());
-
-  for(let i = 1; i < array.length; i++){
-    let t = array[i];
-    if(array[i - 1] > t){
-      let j;
-      for(j = i; j > 0 && array[j - 1] > t; j--){
-        array[j] = array[j - 1];
-        // result.push(array.clone());
-      }
-      array[j] = t;
-    }
-    result.push(array.clone());
-  }
-
-  return result;
-},
-        },
+        this.sortMethod = [
         {
           identifier: 'bubbleSort',
           name: "バブルソート",
@@ -255,6 +230,52 @@ function(_array){
         [array[j], array[j - 1]] = [array[j - 1], array[j]];
       }
     }
+    result.push(array.clone());
+  }
+
+  return result;
+},
+        },
+        {
+          identifier: 'selectionSort',
+          name: "選択ソート",
+          valid: true,
+          code:
+function(_array){
+  let array = _array.clone();
+  let result = [];
+
+  result.push(array.clone());
+  for(let i = 0; i < array.length - 1; i++){
+    let minpos = i;
+    for(let j = i + 1; j < array.length; j++){
+      if(array[j] < array[minpos]){
+        minpos = j;
+      }
+    }
+    [array[i], array[minpos]] = [array[minpos], array[i]];
+    result.push(array.clone());
+  }
+
+  return result;
+},
+        },
+        {
+          identifier: 'insertionSort',
+          name: "挿入ソート",
+          valid: true, // コードが valid かどうか
+          code:
+function(_array){
+  let array = _array.clone();
+  let result = [];
+  result.push(array.clone());
+
+  for(let i = 1; i < array.length; i++){
+    let t = array[i];
+    for(let j = i; j > 0 && array[j - 1] > t; j--){
+      array[j] = array[j - 1];
+    }
+    array[j] = t;
     result.push(array.clone());
   }
 
