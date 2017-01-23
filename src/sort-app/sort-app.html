@@ -272,7 +272,8 @@ function(_array){
 
   for(let i = 1; i < array.length; i++){
     let t = array[i];
-    for(let j = i; j > 0 && array[j - 1] > t; j--){
+    let j;
+    for(j = i; j > 0 && array[j - 1] > t; j--){
       array[j] = array[j - 1];
     }
     array[j] = t;
