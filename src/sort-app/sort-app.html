@@ -420,7 +420,62 @@ function(_array){
 
   return result;
 },
-        }];
+        },
+        {
+          identifier: 'heapSort',
+          name: "ヒープソート",
+          valid: true, // コードが valid かどうか
+          code:
+function(_array){
+  let array = _array.clone();
+  let result = [];
+  result.push(array.clone());
+
+
+  let downheap = function(k, r){
+    let v = array[k];
+    while(1){
+      let left = 2 * k + 1;
+      let right = 2 * k + 2;
+
+      let larger = left;
+
+      // let j = 2 * k;
+      // if(j > r){
+      //   break;
+      // }
+      if(left > r){
+        break;
+      }
+
+      if(left != r){
+        if(array[right] > array[left]){
+          larger = right;
+        }
+      }
+      if(v >= array[larger]){
+        break;
+      }
+      array[k] = array[larger];
+      k = larger;
+    }
+    array[k] = v;
+  }
+
+  for(let i = Math.floor(array.length / 2); i >= 0; i--){
+    downheap(i, array.length - 1);
+  }
+  for(let i = array.length - 1; i >= 1; i--){
+    [array[0], array[i]] = [array[i], array[0]];
+    result.push(array.clone());
+    downheap(0, i - 1);
+  }
+
+  result.push(array.clone());
+  return result;
+},
+        },
+        ];
         this.notifyPath('sortMethod');
 
 
