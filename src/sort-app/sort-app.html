@@ -128,7 +128,7 @@
           </div>
         </div>
 
-        <prism-js language="javascript" linenumbers="true" input-value="[[_selectedSortMethod.code]]">
+        <prism-js id="prism" language="javascript" linenumbers="true" input-value="[[_selectedSortMethod.code]]">
         </prism-js>
       </app-header-layout>
 
@@ -205,6 +205,7 @@
         },
         _selectedSortMethod: {
           type: Object,
+          value: {}
         },
         // _newSortMethod: {
         //   type: Object,
@@ -531,6 +532,9 @@ function(_array){
 
 
         this.set('_selectedSortMethod', this.sortMethod[0]);
+        setTimeout(()=>{
+          this.$.prism.inputValueChanged(this.sortMethod[0].code.toString());
+        }, 20);
         this._executeSort();
       },
 
