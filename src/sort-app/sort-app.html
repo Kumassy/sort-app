@@ -469,6 +469,46 @@ function(_array){
   return result;
 },
         },
+        {
+          identifier: 'mergeSort',
+          name: "マージソート",
+          valid: true, // コードが valid かどうか
+          code:
+function(_array){
+  let array = _array.clone();
+  let result = [];
+  result.push(array.clone());
+
+
+  let merge = function(a, b){
+    let i = 0;
+    let j = 0;
+    let k = 0;
+    let c = [];
+
+    while(i < a.length && j < b.length){
+      if(a[i] <= b[j]){
+        c[k++] = a[i++];
+      }
+      else{
+        c[k++] = b[j++];
+      }
+    }
+    while(i < a.length){
+      c[k++] = a[i++];
+    }
+    while(j < b.length){
+      c[k++] = b[j++];
+    }
+
+    return c;
+  }
+
+
+  result.push(array.clone());
+  return result;
+},
+        },
         ];
         this.notifyPath('sortMethod');
 
