@@ -437,17 +437,11 @@ function(_array){
     while(1){
       let left = 2 * k + 1;
       let right = 2 * k + 2;
-
       let larger = left;
 
-      // let j = 2 * k;
-      // if(j > r){
-      //   break;
-      // }
       if(left > r){
         break;
       }
-
       if(left != r){
         if(array[right] > array[left]){
           larger = right;
