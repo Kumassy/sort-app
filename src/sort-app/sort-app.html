@@ -479,29 +479,40 @@ function(_array){
   let result = [];
   result.push(array.clone());
 
-
-  let merge = function(a, b){
-    let i = 0;
-    let j = 0;
-    let k = 0;
+  let mergeseqs = function(size, a){
+    let start = 0;
     let c = [];
+    while(start < a.length){
+      let i = start;
+      let j = start + size;
+      let k = start;
 
-    while(i < a.length && j < b.length){
-      if(a[i] <= b[j]){
+      let iend = Math.min(start + size - 1, a.length - 1);
+      let jend = Math.min(start + 2 * size - 1, a.length - 1);
+      while(i <= iend && j <= jend){
+        if(a[i] <= a[j]){
+          c[k++] = a[i++];
+        }
+        else{
+          c[k++] = a[j++];
+        }
+      }
+      while(i <= iend){
         c[k++] = a[i++];
       }
-      else{
-        c[k++] = b[j++];
+      while(j <= jend){
+        c[k++] = a[j++];
       }
+      start = start + 2 * size;
     }
-    while(i < a.length){
-      c[k++] = a[i++];
-    }
-    while(j < b.length){
-      c[k++] = b[j++];
-    }
-
     return c;
+  }
+
+  let seqsize = 1;
+  while(seqsize < array.length){
+    array = mergeseqs(seqsize, array);
+    seqsize = seqsize * 2;
+    result.push(array.clone());
   }
 
 
