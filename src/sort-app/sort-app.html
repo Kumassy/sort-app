@@ -529,12 +529,10 @@ function(_array){
         this.set('settings.cellSize', 2);
         this.set('settings.initialization', 2);
         this.set('settings.hue', 190);
+      },
 
-
+      attached: function(){
         this.set('_selectedSortMethod', this.sortMethod[0]);
-        setTimeout(()=>{
-          this.$.prism.inputValueChanged(this.sortMethod[0].code.toString());
-        }, 20);
         this._executeSort();
       },
 
