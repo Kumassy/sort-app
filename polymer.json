@@ -1,6 +1,9 @@
 {
   "entrypoint": "index.html",
+  "shell": "src/sort-app/sort-app.html",
   "fragments": [
-    "src/sort-app/sort-app.html"
+  ],
+  "includeDependencies": [
+    "bower_components/webcomponentsjs/webcomponents-lite.js"
   ]
 }
